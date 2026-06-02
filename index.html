@@ -5,124 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ujian Minat Kerjaya SDS</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-        }
-        .container {
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; line-height: 1.6; padding: 20px; max-width: 800px; margin: auto; }
+        .container { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
         h2 { color: #34495e; margin-top: 30px; }
-        .instructions {
-            background-color: #e9ecef;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            margin-bottom: 20px;
-        }
-        .question-row {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            transition: background 0.2s;
-        }
+        .instructions { background-color: #e9ecef; padding: 15px; border-left: 4px solid #3498db; margin-bottom: 20px; }
+        .question-row { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #eee; transition: background 0.2s; }
         .question-row:hover { background-color: #f8f9fa; }
         .q-num { font-weight: bold; width: 40px; flex-shrink: 0; }
         .q-text { flex-grow: 1; padding-right: 15px; }
-        .checkbox-container {
-            display: flex;
-            gap: 15px;
-            flex-shrink: 0;
-        }
-        label.cb-label {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+        .checkbox-container { display: flex; gap: 15px; flex-shrink: 0; }
+        label.cb-label { cursor: pointer; display: flex; align-items: center; gap: 5px; }
         input[type="checkbox"] { transform: scale(1.3); cursor: pointer; }
-        
-        button {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: #2c3e50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 40px;
-        }
+        button { display: block; width: 100%; padding: 15px; background-color: #2c3e50; color: white; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 40px; }
         button:hover { background-color: #1a252f; }
-        
-        #results {
-            display: none;
-            margin-top: 30px;
-            padding: 25px;
-            background-color: #e8f8f5;
-            border: 2px solid #1abc9c;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .code-display {
-            font-size: 32px;
-            color: #c0392b;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin: 15px 0;
-        }
-        .score-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .score-box {
-            background: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            font-weight: bold;
-        }
-        @media (max-width: 600px) {
-            .score-grid { grid-template-columns: repeat(2, 1fr); }
-        }
+        #results { display: none; margin-top: 30px; padding: 25px; background-color: #e8f8f5; border: 2px solid #1abc9c; border-radius: 8px; text-align: center; }
+        .code-display { font-size: 32px; color: #c0392b; font-weight: bold; letter-spacing: 2px; margin: 15px 0; }
+        .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; margin-bottom: 30px;}
+        .score-box { background: white; padding: 15px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-weight: bold; }
+        .jobs-container { background: #fff; padding: 20px; border-radius: 5px; border-left: 4px solid #f39c12; margin-top: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .jobs-container h3 { color: #d35400; margin-top: 0; }
+        .jobs-container ul { text-align: left; margin-bottom: 0; }
+        .jobs-container li { margin-bottom: 8px; }
+        .note { font-size: 13px; color: #7f8c8d; text-align: left; margin-top: 15px; font-style: italic;}
+        @media (max-width: 600px) { .score-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>SOAL SELIDIK MINAT KERJAYA<br><small style="font-size: 18px; color: #7f8c8d;">SELF-DIRECTED SEARCH (SDS)</small></h1>
-    
     <div class="instructions">
         <strong>Arahan:</strong> Tandakan pada perkara yang anda <strong>SUKA / TAHU / BERMINAT</strong>. Biarkan kosong jika anda tidak pasti atau tidak berminat.
     </div>
 
     <form id="sdsForm">
-        <!-- BAHAGIAN A -->
         <h2>BAHAGIAN A: KESUKAAN</h2>
         <div id="sectionA"></div>
 
-        <!-- BAHAGIAN B -->
         <h2>BAHAGIAN B: KECEKAPAN</h2>
         <div id="sectionB"></div>
 
-        <!-- BAHAGIAN C -->
         <h2>BAHAGIAN C: NAMA PEKERJAAN</h2>
         <div id="sectionC"></div>
 
-        <button type="button" onclick="calculateSDS()">Kira Keputusan (Jana Kod Rumusan)</button>
+        <button type="button" onclick="calculateSDS()">Kira Keputusan & Lihat Kerjaya</button>
     </form>
 
     <div id="results">
@@ -130,9 +57,9 @@
         <div class="code-display" id="summaryCode">---</div>
         <p>Gunakan tiga huruf di atas untuk merujuk kepada senarai kerjaya yang bersesuaian.</p>
         
-        <div class="score-grid" id="scoreGrid">
-            <!-- Scores will be injected here -->
-        </div>
+        <div class="score-grid" id="scoreGrid"></div>
+
+        <div class="jobs-container" id="suggestedJobs"></div>
     </div>
 </div>
 
@@ -353,7 +280,104 @@
         { id: 192, text: "Akauntan Cukai", cat: "C", sec: "C" }
     ];
 
-    // Paparkan soalan ke dalam HTML
+    // Pangkalan Data Kerjaya Berdasarkan 'Occupation Finder' (Wakilan Utama)
+    const occupationsDB = {
+        "RIA": ["Boilermaker", "Carpenter", "Electrician (General)", "Metal Fabricator", "Watch and Clock Maker"],
+        "RIS": ["Flying Instructor", "Medical Diagnostic Radiographer", "Retail Pharmacist", "Motor Mechanic", "Gardener"],
+        "RIC": ["Air Traffic Controller", "Pilot", "Hospital Pharmacist", "Medical Laboratory Scientist"],
+        "RIE": ["Mechanical Engineering Draftsperson", "Diesel Mechanic", "Airconditioning Mechanic"],
+        "RAS": ["Orthotist or Prosthetist", "Landscape Gardener", "Painting Trades Worker"],
+        "RSE": ["Massage Therapist", "Hairdresser", "Dog Handler or Trainer"],
+        "RSC": ["Audiometrist", "Butcher", "Aged or Disabled Carer", "Personal Care Assistant"],
+        "RSI": ["Police Officer", "Fire Fighter", "Aviation Fire Fighter"],
+        "RSA": ["Chef"],
+        "REC": ["Ship's Captain", "Vehicle Body Builder", "Zookeeper"],
+        "REI": ["Ship's Pilot", "Athlete", "Structural Steel Trades Worker"],
+        "RES": ["Dredge Master", "Basketballer", "Footballer", "Taxi Driver"],
+        "RCI": ["Electronic Engineering Technician", "Chemical Plant Operator", "Electrical Linesworker"],
+        "RCA": ["Baker", "Cook", "Cake Decorator"],
+        "RCS": ["Orthotic or Prosthetic Technician", "Bus Driver", "Miner", "Train Driver"],
+        
+        "IAS": ["Cartographer", "Landscape Architect"],
+        "ISC": ["Anaesthetist", "Cardiologist", "General Medical Practitioner (Doctor)", "Psychiatrist"],
+        "ISA": ["Acupuncturist", "Educational Psychologist", "Town Planner", "Urban and Regional Planner"],
+        "IEC": ["Actuary", "Economist", "Civil Engineering Technologist"],
+        "IER": ["Conservation Officer", "Telecommunications Network Engineer", "Process Engineer (Mining)"],
+        "ICE": ["Computer Systems Auditor", "Mathematician", "Industrial Engineer"],
+        "IES": ["Agricultural Economist", "Marine Biologist", "Environmental Health Officer"],
+        "ICR": ["Aerospace Engineer", "Civil Engineer", "Geologist", "Forensic Scientist"],
+        "ICA": ["Geographer", "Metallurgist", "Sports Scientist"],
+        "ICS": ["Analyst Programmer (ICT)", "Market Research Analyst", "Criminologist", "Database Designer"],
+        "IRE": ["Aeronautical Engineer", "Electrical Engineer", "Mechanical Engineer"],
+        "IRC": ["Agronomist", "Biologist", "Chemist", "Veterinarian", "Food Technologist"],
+        
+        "ASE": ["Actor", "Art Director (Film, Television or Stage)", "Director", "Beauty Therapist"],
+        "AER": ["Florist"],
+        "AEI": ["Copywriter", "News Editor", "Print/Radio Journalist", "Critic"],
+        "ASC": ["Interpreter"],
+        "ASR": ["Community Arts Worker", "Tattooist"],
+        "AES": ["Choreographer", "Dancer", "Singer", "Film Producer"],
+        "ASI": ["Author", "Composer", "Musician", "Script Writer"],
+        "ACR": ["Desktop Publishing Operator"],
+        "AIS": ["Animator", "Fashion Designer", "Graphic Designer", "Interior Designer", "Photographer"],
+        "ARI": ["Jewellery Designer", "Audiovisual Technician", "Sound Technician"],
+        "ARE": ["Dressmaker", "Jeweller", "Tailor"],
+        "ARC": ["Dental Prosthetist", "Camera Operator", "Glass Blower"],
+        
+        "SEC": ["Director of Nursing", "Cafe or Restaurant Manager", "Hotel or Motel Manager", "Flight Attendant"],
+        "SCI": ["Librarian", "Registered Nurse (Medical Practice)", "Editorial Assistant"],
+        "SER": ["Child Care Coordinator", "Hospital Administrator", "Welfare Worker", "Fitness Instructor"],
+        "SEI": ["Events Coordinator", "Political Scientist", "Training Officer"],
+        "SCE": ["Recruitment Consultant", "Receptionist", "Information Clerk"],
+        "SRI": ["Park Ranger", "Ambulance Officer", "Personal Trainer", "Vocational Education Teacher"],
+        "SRA": ["Managing Editor", "Recreation Officer", "Youth Worker", "Civil Celebrant"],
+        "SCR": ["Horse Riding Coach", "Therapy Aide", "Teachers' Aide", "Tour Guide"],
+        "SRE": ["Primary School Teacher (Physical Education)", "Driving Instructor", "Basketball Coach"],
+        "SIR": ["Registered Nurse", "Nurse Educator", "Specialist Exercise Trainer", "Registered Midwife"],
+        "SRC": ["Enrolled Nurse", "Child Care Worker", "Mothercraft Nurse", "Lifeguard"],
+        "SAE": ["Dance Teacher", "Make Up Artist"],
+        "SIA": ["Clinical Psychologist", "Social Worker", "Counselling Psychologist"],
+        "SAC": ["Art Therapist", "Secondary School Teacher-Librarian"],
+        "SIC": ["Career Adviser (Counsellor)", "Counsellor", "English as a Second Language Teacher"],
+        "SIE": ["Nurse Practitioner", "Genetics Counsellor", "Disabilities Services Officer"],
+        
+        "ECR": ["Horse or Dog Racing Official", "Radio Despatcher", "Retail Sales Assistant"],
+        "ERI": ["Aquaculture Farmer", "Engineering Manager", "Fisheries Officer"],
+        "ECI": ["Finance Manager", "Bank Manager", "ICT Project Manager"],
+        "ERS": ["Outdoor Adventure Leader"],
+        "ERC": ["Motor Vehicle Parts Interpreter"],
+        "EIA": ["Sports Umpire"],
+        "ECA": ["Advertising and Public Relations Manager", "Barrister", "Lawyer", "Real Estate Agent"],
+        "ECS": ["Valuer", "Property Manager", "Retail Buyer", "Cinema or Theatre Manager"],
+        "EIC": ["Corporate Treasurer", "Network Manager (ICT)", "Property Developer"],
+        "ESC": ["Corporate General Manager", "Human Resource Manager", "School Principal", "Sales Assistant"],
+        "EIR": ["Foreign Exchange Dealer", "Flower Grower", "Mine Deputy"],
+        "EAS": ["Artistic Director", "Judge", "Publisher", "Chef de Cuisine"],
+        "EAR": ["Radio Presenter", "Sports Commentator", "Disc Jockey"],
+        "EAI": ["Television Presenter", "News Reader"],
+        "ESA": ["Advertising Manager", "Public Relations Officer", "Sales Assistant (Cosmetics)"],
+        "ESI": ["Business Analyst (ICT)", "Construction Project Manager", "Human Resource Adviser"],
+        
+        "CRI": ["Electrical Engineering Technician", "Data Entry Operator", "Hardware Technician (ICT)"],
+        "CRS": ["Pharmacy Technician", "Prison Officer", "Word Processing Operator"],
+        "CRA": ["Architectural Draftsperson", "Building Drafting Officer"],
+        "CIE": ["Computer Network Engineer", "Database Administrator", "Software Programmer", "Forensic Accountant"],
+        "CRE": ["Conveyancer", "Stock Clerk", "Fast Food Cook"],
+        "CIR": ["Database Developer", "Purchasing Officer", "Mortuary Technician"],
+        "CIA": ["Surveying and Spatial Science Technician"],
+        "CIS": ["External Auditor", "Internal Auditor"],
+        "CAS": ["Library Assistant", "Proof Reader"],
+        "CAE": ["Forms Designer"],
+        "CAI": ["Homoeopath"],
+        "CER": ["Customs and Border Protection Officer", "Mail Order Clerk"],
+        "CSE": ["Health Information Manager", "Travel Agent", "Bank Worker", "Hotel Concierge"],
+        "CEI": ["Cost Accountant", "Post Office Manager", "Audit Clerk"],
+        "CEA": ["Classified Advertising Clerk"],
+        "CES": ["Motor Vehicle Licence Examiner", "Checkout Operator", "Office Cashier"],
+        "CSR": ["Accountant (General)", "Sales Clerk", "Train Controller"],
+        "CSI": ["Legal Secretary", "Accounts Clerk", "Payroll Clerk"]
+    };
+
     window.onload = function() {
         const secA = document.getElementById('sectionA');
         const secB = document.getElementById('sectionB');
@@ -377,34 +401,56 @@
         });
     };
 
-    // Fungsi pengiraan markah
     function calculateSDS() {
         let scores = { "R": 0, "I": 0, "A": 0, "S": 0, "E": 0, "C": 0 };
         const checkboxes = document.querySelectorAll('.sds-checkbox:checked');
         
-        // Tambah markah berdasarkan pilihan
-        checkboxes.forEach(cb => {
-            scores[cb.value]++;
-        });
+        checkboxes.forEach(cb => { scores[cb.value]++; });
 
-        // Tukar ke format array untuk diisih
         let sortedScores = Object.keys(scores).map(key => {
             return { type: key, score: scores[key] };
         }).sort((a, b) => b.score - a.score);
 
-        // Ambil 3 huruf tertinggi
         let summaryCode = sortedScores.slice(0, 3).map(item => item.type).join("");
 
-        // Paparkan ke skrin
         document.getElementById('summaryCode').innerText = summaryCode;
         
         let gridHTML = "";
         sortedScores.forEach(item => {
-            gridHTML += `<div class="score-box">${item.type} : ${item.score} markah</div>`;
+            gridHTML += `<div class="score-box">${item.type} : ${item.score}</div>`;
         });
         document.getElementById('scoreGrid').innerHTML = gridHTML;
 
-        // Tunjukkan blok keputusan
+        // Proses Paparan Kerjaya
+        let jobsHTML = "<h3>Cadangan Kerjaya Bagi Kod " + summaryCode + "</h3>";
+        let exactJobs = occupationsDB[summaryCode];
+
+        if (exactJobs && exactJobs.length > 0) {
+            jobsHTML += "<ul>";
+            exactJobs.forEach(job => jobsHTML += "<li>" + job + "</li>");
+            jobsHTML += "</ul>";
+        } else {
+            let primaryCode = summaryCode.substring(0, 2);
+            let fallbackJobs = [];
+            for (let key in occupationsDB) {
+                if (key.startsWith(primaryCode)) {
+                    fallbackJobs = fallbackJobs.concat(occupationsDB[key]);
+                }
+            }
+            
+            if (fallbackJobs.length > 0) {
+                jobsHTML += "<p><em>*Tiada padanan spesifik untuk 3 huruf ini. Berikut adalah kerjaya bagi kod dominan yang hampir sama (" + primaryCode + "):</em></p><ul>";
+                [...new Set(fallbackJobs)].slice(0, 10).forEach(job => jobsHTML += "<li>" + job + "</li>");
+                jobsHTML += "</ul>";
+            } else {
+                jobsHTML += "<p>Sila rujuk manual rasmi <strong>Occupation Finder</strong> untuk padanan kerjaya ini.</p>";
+            }
+        }
+        
+        jobsHTML += "<div class='note'>Nota: Susun semula kod huruf anda dalam pelbagai variasi (cth: jika kod anda SEC, cari juga SCE, ESC, dll) untuk meneroka lebih banyak pilihan kerjaya.</div>";
+        
+        document.getElementById('suggestedJobs').innerHTML = jobsHTML;
+
         const resultsDiv = document.getElementById('results');
         resultsDiv.style.display = 'block';
         resultsDiv.scrollIntoView({ behavior: 'smooth' });
