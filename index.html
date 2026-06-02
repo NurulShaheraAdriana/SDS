@@ -20,144 +20,196 @@
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        h1, h2, h3 { color: #2c3e50; }
+        h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 30px; }
         .instructions {
             background-color: #e9ecef;
             padding: 15px;
             border-left: 4px solid #3498db;
             margin-bottom: 20px;
         }
-        .section { margin-top: 30px; margin-bottom: 15px; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
-        .question-item {
+        .question-row {
             display: flex;
-            align-items: flex-start;
-            margin-bottom: 12px;
-            padding: 8px;
-            border-radius: 4px;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
             transition: background 0.2s;
         }
-        .question-item:hover { background-color: #f8f9fa; }
-        input[type="checkbox"] { margin-top: 5px; margin-right: 15px; transform: scale(1.2); cursor: pointer; }
-        label { cursor: pointer; width: 100%; }
+        .question-row:hover { background-color: #f8f9fa; }
+        .q-num { font-weight: bold; width: 40px; }
+        .q-text { flex-grow: 1; padding-right: 15px; }
+        .checkbox-container {
+            display: flex;
+            gap: 15px;
+        }
+        label.cb-label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        input[type="checkbox"] { transform: scale(1.3); cursor: pointer; }
+        
         button {
             display: block;
             width: 100%;
             padding: 15px;
-            background-color: #3498db;
+            background-color: #2c3e50;
             color: white;
             border: none;
             border-radius: 5px;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 30px;
+            margin-top: 40px;
         }
-        button:hover { background-color: #2980b9; }
+        button:hover { background-color: #1a252f; }
+        
         #results {
             display: none;
             margin-top: 30px;
-            padding: 20px;
+            padding: 25px;
             background-color: #e8f8f5;
-            border: 1px solid #1abc9c;
-            border-radius: 5px;
+            border: 2px solid #1abc9c;
+            border-radius: 8px;
+            text-align: center;
         }
-        .score-row { display: flex; justify-content: space-between; max-width: 300px; margin-bottom: 5px; }
+        .code-display {
+            font-size: 32px;
+            color: #c0392b;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin: 15px 0;
+        }
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .score-box {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Soal Selidik Minat Kerjaya (SDS)</h1>
+    <h1>SOAL SELIDIK MINAT KERJAYA<br><small style="font-size: 18px; color: #7f8c8d;">SELF-DIRECTED SEARCH (SDS)</small></h1>
+    
     <div class="instructions">
-        <p>Sila jawab semua soalan di bawah. Tandakan pada perkara yang anda <strong>SUKA/TAHU/BERMINAT</strong> dan biarkan kosong pada perkara yang anda <strong>TIDAK SUKA/TIDAK TAHU</strong>.</p>
+        <strong>Arahan:</strong> Tandakan pada perkara yang anda <strong>SUKA / TAHU / BERMINAT</strong>. Biarkan kosong jika anda tidak pasti atau tidak berminat.
     </div>
 
-    <div id="questionnaire"></div>
+    <form id="sdsForm">
+        <!-- BAHAGIAN A -->
+        <h2>BAHAGIAN A: KESUKAAN</h2>
+        <div id="sectionA"></div>
 
-    <button onclick="calculateResults()">Kira Keputusan</button>
+        <!-- BAHAGIAN B -->
+        <h2>BAHAGIAN B: KECEKAPAN</h2>
+        <div id="sectionB"></div>
+
+        <!-- BAHAGIAN C -->
+        <h2>BAHAGIAN C: NAMA PEKERJAAN</h2>
+        <div id="sectionC"></div>
+
+        <button type="button" onclick="calculateSDS()">Kira Keputusan (Jana Kod Rumusan)</button>
+    </form>
 
     <div id="results">
-        <h2>Keputusan Anda</h2>
-        <h3 id="summary-code" style="color: #c0392b; font-size: 24px;"></h3>
-        <p><strong>Pecahan Markah:</strong></p>
-        <div id="score-breakdown"></div>
+        <h2>Keputusan Ujian SDS Anda</h2>
+        <div class="code-display" id="summaryCode">---</div>
+        <p>Gunakan tiga huruf di atas untuk merujuk kepada senarai kerjaya yang bersesuaian.</p>
+        
+        <div class="score-grid" id="scoreGrid">
+            <!-- Scores will be injected here -->
+        </div>
     </div>
 </div>
 
 <script>
-    // --- Database of Questions ---
-    // Add the rest of the 192 questions here
-    const questions = [
-        // Bahagian A
-        { id: 1, text: "Membaiki alat-alat elektrik", type: "R", section: "Bahagian A: Kesukaan" },
-        { id: 2, text: "Membaiki alat-alat mekanik", type: "R", section: "Bahagian A: Kesukaan" },
-        { id: 11, text: "Membaca buku atau majalah sains", type: "I", section: "Bahagian A: Kesukaan" },
-        { id: 21, text: "Melakar, melukis atau mewarna", type: "A", section: "Bahagian A: Kesukaan" },
-        { id: 31, text: "Menulis surat kepada kawan", type: "S", section: "Bahagian A: Kesukaan" },
-        { id: 41, text: "Mempengaruhi orang lain", type: "E", section: "Bahagian A: Kesukaan" },
-        { id: 51, text: "Menaip bahan-bahan bertulis atau surat-surat", type: "C", section: "Bahagian A: Kesukaan" },
-        
-        // Bahagian B
-        { id: 61, text: "Menggunakan jangka volta", type: "R", section: "Bahagian B: Kecekapan" },
-        { id: 71, text: "Memahami fungsi tiub hampagas", type: "I", section: "Bahagian B: Kecekapan" },
-        { id: 91, text: "Menerangkan sesuatu dengan jelas", type: "S", section: "Bahagian B: Kecekapan" },
-        
-        // Bahagian C
-        { id: 121, text: "Mekanik Kapalterbang", type: "R", section: "Bahagian C: Nama Pekerjaan" },
-        { id: 133, text: "Ahli Kajicuaca", type: "I", section: "Bahagian C: Nama Pekerjaan" }
+    // Pangkalan Data Soalan (Sila tambah baki soalan di sini mengikut format)
+    const db = [
+        // Bahagian A: Kesukaan (1 - 60)
+        { id: 1, text: "Membaiki alat-alat elektrik", cat: "R", sec: "A" },
+        { id: 2, text: "Membaiki alat-alat mekanik", cat: "R", sec: "A" },
+        { id: 11, text: "Membaca buku atau majalah sains", cat: "I", sec: "A" },
+        { id: 21, text: "Melakar, melukis atau mewarna", cat: "A", sec: "A" },
+        { id: 31, text: "Menulis surat kepada kawan", cat: "S", sec: "A" },
+        { id: 41, text: "Mempengaruhi orang lain", cat: "E", sec: "A" },
+        { id: 51, text: "Menaip bahan-bahan bertulis atau surat-surat", cat: "C", sec: "A" },
+
+        // Bahagian B: Kecekapan (61 - 120)
+        { id: 61, text: "Menggunakan jangka volta", cat: "R", sec: "B" },
+        { id: 71, text: "Memahami fungsi tiub hampagas", cat: "I", sec: "B" },
+        { id: 81, text: "Menyanyi dalam bahagian-dua atau bahagian-empat...", cat: "A", sec: "B" },
+
+        // Bahagian C: Nama Pekerjaan (121 - 192)
+        { id: 121, text: "Mekanik Kapalterbang", cat: "R", sec: "C" },
+        { id: 133, text: "Ahli Kajicuaca", cat: "I", sec: "C" },
+        { id: 145, text: "Penyair", cat: "A", sec: "C" }
     ];
 
-    // --- Generate the Form ---
-    const container = document.getElementById('questionnaire');
-    let currentSection = "";
+    // Paparkan soalan ke dalam HTML
+    window.onload = function() {
+        const secA = document.getElementById('sectionA');
+        const secB = document.getElementById('sectionB');
+        const secC = document.getElementById('sectionC');
 
-    questions.forEach(q => {
-        if (q.section !== currentSection) {
-            currentSection = q.section;
-            container.innerHTML += `<h2 class="section">${currentSection}</h2>`;
-        }
+        db.forEach(q => {
+            const html = `
+                <div class="question-row">
+                    <div class="q-num">${q.id}.</div>
+                    <div class="q-text">${q.text}</div>
+                    <div class="checkbox-container">
+                        <label class="cb-label">
+                            <input type="checkbox" value="${q.cat}" class="sds-checkbox"> Ya
+                        </label>
+                    </div>
+                </div>
+            `;
+            if (q.sec === "A") secA.innerHTML += html;
+            if (q.sec === "B") secB.innerHTML += html;
+            if (q.sec === "C") secC.innerHTML += html;
+        });
+    };
 
-        container.innerHTML += `
-            <div class="question-item">
-                <input type="checkbox" id="q${q.id}" value="${q.type}">
-                <label for="q${q.id}">${q.id}. ${q.text}</label>
-            </div>
-        `;
-    });
-
-    // --- Process Results ---
-    function calculateResults() {
-        // Initialize scores
+    // Fungsi pengiraan markah
+    function calculateSDS() {
         let scores = { "R": 0, "I": 0, "A": 0, "S": 0, "E": 0, "C": 0 };
+        const checkboxes = document.querySelectorAll('.sds-checkbox:checked');
         
-        // Count checked boxes
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-        checkboxes.forEach(box => {
-            scores[box.value]++;
+        // Tambah markah berdasarkan pilihan
+        checkboxes.forEach(cb => {
+            scores[cb.value]++;
         });
 
-        // Convert to array and sort descending
+        // Tukar ke format array untuk diisih
         let sortedScores = Object.keys(scores).map(key => {
             return { type: key, score: scores[key] };
         }).sort((a, b) => b.score - a.score);
 
-        // Get top 3
+        // Ambil 3 huruf tertinggi
         let summaryCode = sortedScores.slice(0, 3).map(item => item.type).join("");
 
-        // Display Data
-        document.getElementById('summary-code').innerText = "Kod Rumusan: " + summaryCode;
+        // Paparkan ke skrin
+        document.getElementById('summaryCode').innerText = summaryCode;
         
-        let breakdownHTML = "";
+        let gridHTML = "";
         sortedScores.forEach(item => {
-            breakdownHTML += `<div class="score-row"><span><strong>${item.type}:</strong></span> <span>${item.score}</span></div>`;
+            gridHTML += `<div class="score-box">${item.type} : ${item.score} markah</div>`;
         });
-        document.getElementById('score-breakdown').innerHTML = breakdownHTML;
+        document.getElementById('scoreGrid').innerHTML = gridHTML;
 
-        // Show results section
-        document.getElementById('results').style.display = 'block';
-        
-        // Scroll to results
-        document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        // Tunjukkan blok keputusan
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.style.display = 'block';
+        resultsDiv.scrollIntoView({ behavior: 'smooth' });
     }
 </script>
 
