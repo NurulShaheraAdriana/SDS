@@ -36,11 +36,12 @@
             transition: background 0.2s;
         }
         .question-row:hover { background-color: #f8f9fa; }
-        .q-num { font-weight: bold; width: 40px; }
+        .q-num { font-weight: bold; width: 40px; flex-shrink: 0; }
         .q-text { flex-grow: 1; padding-right: 15px; }
         .checkbox-container {
             display: flex;
             gap: 15px;
+            flex-shrink: 0;
         }
         label.cb-label {
             cursor: pointer;
@@ -94,6 +95,9 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             font-weight: bold;
         }
+        @media (max-width: 600px) {
+            .score-grid { grid-template-columns: repeat(2, 1fr); }
+        }
     </style>
 </head>
 <body>
@@ -133,26 +137,220 @@
 </div>
 
 <script>
-    // Pangkalan Data Soalan (Sila tambah baki soalan di sini mengikut format)
+    // Pangkalan Data Lengkap 192 Soalan
     const db = [
-        // Bahagian A: Kesukaan (1 - 60)
+        // BAHAGIAN A: KESUKAAN - REALISTIC (1-10)
         { id: 1, text: "Membaiki alat-alat elektrik", cat: "R", sec: "A" },
         { id: 2, text: "Membaiki alat-alat mekanik", cat: "R", sec: "A" },
+        { id: 3, text: "Membuat benda-benda daripada kayu", cat: "R", sec: "A" },
+        { id: 4, text: "Memandu trak atau traktor", cat: "R", sec: "A" },
+        { id: 5, text: "Mengikuti kursus lukisan mekanik", cat: "R", sec: "A" },
+        { id: 6, text: "Menggunakan alat-alat kerja logam atau mesin", cat: "R", sec: "A" },
+        { id: 7, text: "Mengubahsuai enjin kereta atau motosikal", cat: "R", sec: "A" },
+        { id: 8, text: "Mengikuti kursus Seni Perusahaan", cat: "R", sec: "A" },
+        { id: 9, text: "Mengikuti kursus Kerja Kayu", cat: "R", sec: "A" },
+        { id: 10, text: "Mengikuti kursus Automekanik", cat: "R", sec: "A" },
+        // BAHAGIAN A: KESUKAAN - INVESTIGATIVE (11-20)
         { id: 11, text: "Membaca buku atau majalah sains", cat: "I", sec: "A" },
+        { id: 12, text: "Bekerja dalam makmal penyelidikan", cat: "I", sec: "A" },
+        { id: 13, text: "Membuat kerja projek sains", cat: "I", sec: "A" },
+        { id: 14, text: "Membina model roket", cat: "I", sec: "A" },
+        { id: 15, text: "Bekerja menggunakan alat-alat kimia", cat: "I", sec: "A" },
+        { id: 16, text: "Membaca subjek-subjek tertentu yang khusus", cat: "I", sec: "A" },
+        { id: 17, text: "Mengikuti kursus Fizik", cat: "I", sec: "A" },
+        { id: 18, text: "Mengikuti kursus Kimia", cat: "I", sec: "A" },
+        { id: 19, text: "Mengikuti kursus Geometri", cat: "I", sec: "A" },
+        { id: 20, text: "Mengikuti kursus Biologi", cat: "I", sec: "A" },
+        // BAHAGIAN A: KESUKAAN - ARTISTIC (21-30)
         { id: 21, text: "Melakar, melukis atau mewarna", cat: "A", sec: "A" },
+        { id: 22, text: "Menonton lakonan/drama", cat: "A", sec: "A" },
+        { id: 23, text: "Mereka bentuk perabot atau bangunan", cat: "A", sec: "A" },
+        { id: 24, text: "Bermain alat muzik dalam kumpulan muzik atau orkestra", cat: "A", sec: "A" },
+        { id: 25, text: "Berlatih menggunakan alat muzik", cat: "A", sec: "A" },
+        { id: 26, text: "Menghadiri pertunjukan pentas atau muzik", cat: "A", sec: "A" },
+        { id: 27, text: "Mencipta potret atau foto", cat: "A", sec: "A" },
+        { id: 28, text: "Membaca buku-buku lakonan", cat: "A", sec: "A" },
+        { id: 29, text: "Membaca atau menulis sajak", cat: "A", sec: "A" },
+        { id: 30, text: "Mengikuti kursus Seni Lukis", cat: "A", sec: "A" },
+        // BAHAGIAN A: KESUKAAN - SOCIAL (31-40)
         { id: 31, text: "Menulis surat kepada kawan", cat: "S", sec: "A" },
+        { id: 32, text: "Menghadiri perjumpaan-perjumpaan agama", cat: "S", sec: "A" },
+        { id: 33, text: "Menganggotai kelab sosial/persatuan", cat: "S", sec: "A" },
+        { id: 34, text: "Menolong orang yang mempunyai masalah peribadi", cat: "S", sec: "A" },
+        { id: 35, text: "Menjaga kanak-kanak", cat: "S", sec: "A" },
+        { id: 36, text: "Menghadiri majlis-majlis", cat: "S", sec: "A" },
+        { id: 37, text: "Menari", cat: "S", sec: "A" },
+        { id: 38, text: "Menghadiri mesyuarat atau persidangan", cat: "S", sec: "A" },
+        { id: 39, text: "Menghadiri temasya sukan", cat: "S", sec: "A" },
+        { id: 40, text: "Memulakan persahabatan", cat: "S", sec: "A" },
+        // BAHAGIAN A: KESUKAAN - ENTERPRISING (41-50)
         { id: 41, text: "Mempengaruhi orang lain", cat: "E", sec: "A" },
+        { id: 42, text: "Berbincang mengenai politik", cat: "E", sec: "A" },
+        { id: 43, text: "Menguruskan perniagaan sendiri", cat: "E", sec: "A" },
+        { id: 44, text: "Menghadiri persidangan", cat: "E", sec: "A" },
+        { id: 45, text: "Memberi ceramah", cat: "E", sec: "A" },
+        { id: 46, text: "Menjadi pemimpin sebarang kumpulan", cat: "E", sec: "A" },
+        { id: 47, text: "Menyelia kerja-kerja orang lain", cat: "E", sec: "A" },
+        { id: 48, text: "Menemui orang-orang penting", cat: "E", sec: "A" },
+        { id: 49, text: "Mengetuai kumpulan dalam mencapai sesuatu matlamat", cat: "E", sec: "A" },
+        { id: 50, text: "Mengambil bahagian dalam kempen politik", cat: "E", sec: "A" },
+        // BAHAGIAN A: KESUKAAN - CONVENTIONAL (51-60)
         { id: 51, text: "Menaip bahan-bahan bertulis atau surat-surat", cat: "C", sec: "A" },
+        { id: 52, text: "Mengira angka-angka dalam urusan perniagaan atau menyimpan kira-kira", cat: "C", sec: "A" },
+        { id: 53, text: "Menggunakan mesin perniagaan", cat: "C", sec: "A" },
+        { id: 54, text: "Menyimpan rekod-rekod perbelanjaan perniagaan", cat: "C", sec: "A" },
+        { id: 55, text: "Mengikuti kursus menaip", cat: "C", sec: "A" },
+        { id: 56, text: "Mengikuti kursus perniagaan", cat: "C", sec: "A" },
+        { id: 57, text: "Mengikuti kursus simpan-kira", cat: "C", sec: "A" },
+        { id: 58, text: "Mengikuti kursus matematik, perdagangan", cat: "C", sec: "A" },
+        { id: 59, text: "Menyimpan surat-surat, laporan-laporan dan rekod-rekod dalam fail", cat: "C", sec: "A" },
+        { id: 60, text: "Menulis surat-surat perniagaan", cat: "C", sec: "A" },
 
-        // Bahagian B: Kecekapan (61 - 120)
+        // BAHAGIAN B: KECEKAPAN - REALISTIC (61-70)
         { id: 61, text: "Menggunakan jangka volta", cat: "R", sec: "B" },
+        { id: 62, text: "Melaras karburator", cat: "R", sec: "B" },
+        { id: 63, text: "Menggunakan alat-alat elektrik logam di bengkel seperti gerudi elektrik", cat: "R", sec: "B" },
+        { id: 64, text: "Mengolah perabot atau barang-barang daripada kayu", cat: "R", sec: "B" },
+        { id: 65, text: "Membaca 'blueprints'", cat: "R", sec: "B" },
+        { id: 66, text: "Membaiki kerosakan elektrik yang mudah", cat: "R", sec: "B" },
+        { id: 67, text: "Membaiki alat perabot", cat: "R", sec: "B" },
+        { id: 68, text: "Membuat lukisan mekanik", cat: "R", sec: "B" },
+        { id: 69, text: "Membaiki kerosakan radio atau TV yang mudah", cat: "R", sec: "B" },
+        { id: 70, text: "Membaiki kerosakan paip air yang mudah", cat: "R", sec: "B" },
+        // BAHAGIAN B: KECEKAPAN - INVESTIGATIVE (71-80)
         { id: 71, text: "Memahami fungsi tiub hampagas", cat: "I", sec: "B" },
-        { id: 81, text: "Menyanyi dalam bahagian-dua atau bahagian-empat...", cat: "A", sec: "B" },
+        { id: 72, text: "Menamakan tiga jenis makanan yang mempunyai kandungan protein yang tinggi", cat: "I", sec: "B" },
+        { id: 73, text: "Memahami 'separuh hayat' dalam unsur radioaktif", cat: "I", sec: "B" },
+        { id: 74, text: "Menggunakan jadual logaritma", cat: "I", sec: "B" },
+        { id: 75, text: "Menggunakan pengukur bolehubah untuk mendarab dan membahagi", cat: "I", sec: "B" },
+        { id: 76, text: "Menggunakan mikroskop", cat: "I", sec: "B" },
+        { id: 77, text: "Mengecam tiga gugusan bintang-bintang", cat: "I", sec: "B" },
+        { id: 78, text: "Menerangkan fungsi-fungsi sel darah putih", cat: "I", sec: "B" },
+        { id: 79, text: "Mentafsir formula kimia yang mudah", cat: "I", sec: "B" },
+        { id: 80, text: "Memahami mengapa satelit buatan manusia tidak jatuh ke bumi", cat: "I", sec: "B" },
+        // BAHAGIAN B: KECEKAPAN - ARTISTIC (81-90)
+        { id: 81, text: "Menyanyi dalam bahagian-dua atau bahagian-empat dalam kumpulan koir", cat: "A", sec: "B" },
+        { id: 82, text: "Melakukan persembahan muzik berseorangan", cat: "A", sec: "B" },
+        { id: 83, text: "Berlakon dalam sebuah lakonan", cat: "A", sec: "B" },
+        { id: 84, text: "Membaca sambil menterjemah", cat: "A", sec: "B" },
+        { id: 85, text: "Menterjemah geraktari moden atau ballet", cat: "A", sec: "B" },
+        { id: 86, text: "Melukis gambar manusia sehingga dapat dikenali", cat: "A", sec: "B" },
+        { id: 87, text: "Mencipta lukisan atau ukiran", cat: "A", sec: "B" },
+        { id: 88, text: "Membuat barang-barang daripada tembikar", cat: "A", sec: "B" },
+        { id: 89, text: "Mencipta pakaian, poster atau perabot", cat: "A", sec: "B" },
+        { id: 90, text: "Menulis cerita-cerita atau sajak dengan baik", cat: "A", sec: "B" },
+        // BAHAGIAN B: KECEKAPAN - SOCIAL (91-100)
+        { id: 91, text: "Menerangkan sesuatu dengan jelas", cat: "S", sec: "B" },
+        { id: 92, text: "Boleh bekerjasama atau bekerja dengan orang lain", cat: "S", sec: "B" },
+        { id: 93, text: "Melayan tetamu dengan baik", cat: "S", sec: "B" },
+        { id: 94, text: "Mengajar kanak-kanak", cat: "S", sec: "B" },
+        { id: 95, text: "Merancang hiburan untuk sesuatu majlis", cat: "S", sec: "B" },
+        { id: 96, text: "Menolong orang yang dalam kesusahan atau kesedihan", cat: "S", sec: "B" },
+        { id: 97, text: "Menjadi pembantu sukarela di hospital, klinik atau di rumah orang-orang tua", cat: "S", sec: "B" },
+        { id: 98, text: "Merancang aktiviti-aktiviti amal untuk sekolah", cat: "S", sec: "B" },
+        { id: 99, text: "Meramal personaliti dengan baik", cat: "S", sec: "B" },
+        { id: 100, text: "Melayan orang yang lebih tua daripada saya dengan baik", cat: "S", sec: "B" },
+        // BAHAGIAN B: KECEKAPAN - ENTERPRISING (101-110)
+        { id: 101, text: "Menyelia kerja-kerja orang lain", cat: "E", sec: "B" },
+        { id: 102, text: "Membuat orang lain bekerja mengikut cara saya", cat: "E", sec: "B" },
+        { id: 103, text: "Mempunyai semangat dan daya tenaga yang tinggi", cat: "E", sec: "B" },
+        { id: 104, text: "Menjadi jurujual yang cemerlang", cat: "E", sec: "B" },
+        { id: 105, text: "Mewakili kumpulan mengemukakan cadangan atau aduan kepada pihak berkuasa", cat: "E", sec: "B" },
+        { id: 106, text: "Memenangi hadiah untuk kerja-kerja sebagai jurujual atau pemimpin", cat: "E", sec: "B" },
+        { id: 107, text: "Mengelola kelab, pertubuhan atau perkumpulan", cat: "E", sec: "B" },
+        { id: 108, text: "Memulakan perniagaan sendiri", cat: "E", sec: "B" },
+        { id: 109, text: "Menjadi pemimpin yang berjaya", cat: "E", sec: "B" },
+        { id: 110, text: "Menjadi pedebat yang baik", cat: "E", sec: "B" },
+        // BAHAGIAN B: KECEKAPAN - CONVENTIONAL (111-120)
+        { id: 111, text: "Mengendalikan mesin salin", cat: "C", sec: "B" },
+        { id: 112, text: "Menulis trengkas", cat: "C", sec: "B" },
+        { id: 113, text: "Menympan surat-surat atau bahan-bahan bertulis dalam fail", cat: "C", sec: "B" },
+        { id: 114, text: "Memegang jawatan dalam pejabat", cat: "C", sec: "B" },
+        { id: 115, text: "Menggunakan mesin simpan kira", cat: "C", sec: "B" },
+        { id: 116, text: "Menggunakan mesin taip atau komputer", cat: "C", sec: "B" },
+        { id: 117, text: "Membuat banyak kerja bertulis dalam masa yang singkat", cat: "C", sec: "B" },
+        { id: 118, text: "Menggunakan mesin kira", cat: "C", sec: "B" },
+        { id: 119, text: "Menggunakan alat pemerosesan data yang mudah seperti alat penebuk lubang (keypunch)", cat: "C", sec: "B" },
+        { id: 120, text: "Menyimpan rekod-rekod bayaran atau jualan dengan rapi", cat: "C", sec: "B" },
 
-        // Bahagian C: Nama Pekerjaan (121 - 192)
+        // BAHAGIAN C: NAMA PEKERJAAN - REALISTIC (121-132)
         { id: 121, text: "Mekanik Kapalterbang", cat: "R", sec: "C" },
+        { id: 122, text: "Operator Janaelektrik", cat: "R", sec: "C" },
+        { id: 123, text: "Pemasang Paip", cat: "R", sec: "C" },
+        { id: 124, text: "Pemandu Jentera Berat", cat: "R", sec: "C" },
+        { id: 125, text: "Juru Ukur", cat: "R", sec: "C" },
+        { id: 126, text: "Merinyu Binaan", cat: "R", sec: "C" },
+        { id: 127, text: "Operator Radio", cat: "R", sec: "C" },
+        { id: 128, text: "Atenden Pam Minyak", cat: "R", sec: "C" },
+        { id: 129, text: "Penggunting Pokok", cat: "R", sec: "C" },
+        { id: 130, text: "Pereka Alat Perkakas", cat: "R", sec: "C" },
+        { id: 131, text: "Pengukir Foto", cat: "R", sec: "C" },
+        { id: 132, text: "Juru Elektrik", cat: "R", sec: "C" },
+        // BAHAGIAN C: NAMA PEKERJAAN - INVESTIGATIVE (133-144)
         { id: 133, text: "Ahli Kajicuaca", cat: "I", sec: "C" },
-        { id: 145, text: "Penyair", cat: "A", sec: "C" }
+        { id: 134, text: "Ahli Biologi", cat: "I", sec: "C" },
+        { id: 135, text: "Pengkaji Cakerawala", cat: "I", sec: "C" },
+        { id: 136, text: "Ahli Zoologi", cat: "I", sec: "C" },
+        { id: 137, text: "Ahli Kimia", cat: "I", sec: "C" },
+        { id: 138, text: "Penyelidik Sains Bebas", cat: "I", sec: "C" },
+        { id: 139, text: "Penulis Rencana Sains", cat: "I", sec: "C" },
+        { id: 140, text: "Penyunting Jurnal/Majalah Sains", cat: "I", sec: "C" },
+        { id: 141, text: "Ahli Kajibumi", cat: "I", sec: "C" },
+        { id: 142, text: "Ahli Botani", cat: "I", sec: "C" },
+        { id: 143, text: "Penyelidik Sains", cat: "I", sec: "C" },
+        { id: 144, text: "Ahli Fizik", cat: "I", sec: "C" },
+        // BAHAGIAN C: NAMA PEKERJAAN - ARTISTIC (145-156)
+        { id: 145, text: "Penyair", cat: "A", sec: "C" },
+        { id: 146, text: "Pemimpin Simfoni", cat: "A", sec: "C" },
+        { id: 147, text: "Ahli Muzik", cat: "A", sec: "C" },
+        { id: 148, text: "Pengarang", cat: "A", sec: "C" },
+        { id: 149, text: "Penulis Bebas", cat: "A", sec: "C" },
+        { id: 150, text: "Penyusun Muzik", cat: "A", sec: "C" },
+        { id: 151, text: "Peniaga Seni Lukis", cat: "A", sec: "C" },
+        { id: 152, text: "Pelatih Drama", cat: "A", sec: "C" },
+        { id: 153, text: "Penyanyi Konsert", cat: "A", sec: "C" },
+        { id: 154, text: "Pengubah Lagu", cat: "A", sec: "C" },
+        { id: 155, text: "Pengarah Pentas", cat: "A", sec: "C" },
+        { id: 156, text: "Penulis Skrip Lakonan", cat: "A", sec: "C" },
+        // BAHAGIAN C: NAMA PEKERJAAN - SOCIAL (157-168)
+        { id: 157, text: "Pendakwah/Mubaligh", cat: "S", sec: "C" },
+        { id: 158, text: "Pakar Jenayah Kanak-kanak", cat: "S", sec: "C" },
+        { id: 159, text: "Terapis Pertuturan", cat: "S", sec: "C" },
+        { id: 160, text: "Kaunselor Perkahwinan", cat: "S", sec: "C" },
+        { id: 161, text: "Pengarah Padang Permainan", cat: "S", sec: "C" },
+        { id: 162, text: "Guru Sains Sosial", cat: "S", sec: "C" },
+        { id: 163, text: "Psikologi Perubatan", cat: "S", sec: "C" },
+        { id: 164, text: "Pegawai Kebajikan Masyarakat", cat: "S", sec: "C" },
+        { id: 165, text: "Penolong Pegawai Pendidikan Daerah", cat: "S", sec: "C" },
+        { id: 166, text: "Kaunselor Pelajar", cat: "S", sec: "C" },
+        { id: 167, text: "Penyiasat Kes Sakit Jiwa", cat: "S", sec: "C" },
+        { id: 168, text: "Kaunselor Kerjaya", cat: "S", sec: "C" },
+        // BAHAGIAN C: NAMA PEKERJAAN - ENTERPRISING (169-180)
+        { id: 169, text: "Jurujual Saham dan Bon", cat: "E", sec: "C" },
+        { id: 170, text: "Spekulator", cat: "E", sec: "C" },
+        { id: 171, text: "Wakil Pengilang", cat: "E", sec: "C" },
+        { id: 172, text: "Penerbit Televisyen", cat: "E", sec: "C" },
+        { id: 173, text: "Pengurus Hotel", cat: "E", sec: "C" },
+        { id: 174, text: "Pegawai Eksekutif", cat: "E", sec: "C" },
+        { id: 175, text: "Pengurus Restoran", cat: "E", sec: "C" },
+        { id: 176, text: "Juruacara", cat: "E", sec: "C" },
+        { id: 177, text: "Jurujual Berkereta", cat: "E", sec: "C" },
+        { id: 178, text: "Jurujual Harta/Rumah", cat: "E", sec: "C" },
+        { id: 179, text: "Pakar Perunding Perhubungan", cat: "E", sec: "C" },
+        { id: 180, text: "Pengurus Kempen Ahli Politik", cat: "E", sec: "C" },
+        // BAHAGIAN C: NAMA PEKERJAAN - CONVENTIONAL (181-192)
+        { id: 181, text: "Penyimpan Kira-kira", cat: "C", sec: "C" },
+        { id: 182, text: "Pakar Kawalan Kualiti", cat: "C", sec: "C" },
+        { id: 183, text: "Penyemak Belanjawan", cat: "C", sec: "C" },
+        { id: 184, text: "Akauntan", cat: "C", sec: "C" },
+        { id: 185, text: "Jurutrengkas Mahkamah", cat: "C", sec: "C" },
+        { id: 186, text: "Kerani Bank", cat: "C", sec: "C" },
+        { id: 187, text: "Pegawai Daftar Barang-Barang", cat: "C", sec: "C" },
+        { id: 188, text: "Penilai Harga", cat: "C", sec: "C" },
+        { id: 189, text: "Kerani Gaji", cat: "C", sec: "C" },
+        { id: 190, text: "Penganalisa Kewangan", cat: "C", sec: "C" },
+        { id: 191, text: "Pemeriksa Kira-Kira Bank", cat: "C", sec: "C" },
+        { id: 192, text: "Akauntan Cukai", cat: "C", sec: "C" }
     ];
 
     // Paparkan soalan ke dalam HTML
